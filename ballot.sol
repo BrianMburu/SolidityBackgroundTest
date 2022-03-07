@@ -1,4 +1,4 @@
-// Open source program
+// the
 // SPDX-License-Identifier: MIT
 
 pragma solidity >=0.7.0 <0.9.0;
@@ -47,18 +47,26 @@ contract Ballot {
             }));
         }
     }
+
     
-    /** 
+    /*
      * @dev Give 'voter' the right to vote on this ballot. May only be called by 'chairperson'.
      * @param voter address of voter
      */
-    function giveRightToVote(address voter) public {
+     //Function to give right to vote to  a list of voters
+    function giveRightToVote(address [] memory votersList) public {
         require(
             msg.sender == chairperson,
             "Only chairperson can give right to vote."
         );
-        require(voters[voter].weight == 0);
-        voters[voter].weight = 1;
+        for(uint i=0; i < votersList.length; i++){
+        require(
+            !voters[votersList[uint(i)]].voted,
+            "The voter already voted."
+        );
+        require(voters[votersList[uint(i)]].weight == 0);
+        voters[votersList[uint(i)]].weight = 1;
+        }
     }
 
     /**
@@ -133,3 +141,4 @@ contract Ballot {
         winnerName_ = proposals[winningProposal()].name;
     }
 }
+
